@@ -1,591 +1,637 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Luxury Gym</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
+    /* ── TOKENS ─────────────────────────────────────── */
     :root{
-      --bg:#f6f8fb;
-      --bg-soft:#eef3f9;
-      --card:#ffffff;
-      --card-2:#f9fbff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --line:#e5e7eb;
-      --primary:#7c3aed;
-      --primary2:#a78bfa;
-      --green:#10b981;
-      --danger:#ef4444;
-      --shadow:0 10px 30px rgba(31,41,55,.08);
-      --shadow-2:0 16px 40px rgba(31,41,55,.10);
-      --radius:18px;
+      --bg:        #f7f5f2;
+      --bg2:       #eeebe5;
+      --panel:     #ffffff;
+      --panel2:    #faf9f7;
+      --line:      #e4dfd7;
+      --text:      #18150f;
+      --text2:     #3a3328;
+      --muted:     #8c8077;
+      --gold:      #c9880a;
+      --gold2:     #e8a820;
+      --gold3:     #f5c84a;
+      --goldLight: rgba(232,168,32,.14);
+      --goldGlow:  rgba(201,136,10,.22);
+      --green:     #1f7a52;
+      --red:       #b83232;
+      --sh1: 0 1px 3px rgba(24,21,15,.05), 0 6px 18px rgba(24,21,15,.06);
+      --sh2: 0 2px 8px rgba(24,21,15,.06), 0 14px 36px rgba(24,21,15,.08);
+      --sh3: 0 4px 20px rgba(24,21,15,.08), 0 28px 64px rgba(24,21,15,.10);
+      --r:  14px;
+      --r2: 20px;
+      --r3: 28px;
+      --sideW: 268px;
+      --ease: cubic-bezier(.22,.68,0,1.15);
+      --ease2: cubic-bezier(.4,0,.2,1);
     }
-
     body.theme-dark{
-      --bg:#0f172a;
-      --bg-soft:#111827;
-      --card:#111827;
-      --card-2:#182233;
-      --text:#f8fafc;
-      --muted:#94a3b8;
-      --line:#263244;
-      --shadow:0 10px 30px rgba(0,0,0,.28);
-      --shadow-2:0 16px 40px rgba(0,0,0,.36);
+      --bg:#0d0b08; --bg2:#131009;
+      --panel:#1a1710; --panel2:#201d15;
+      --line:#2d2920; --text:#f2eddf;
+      --text2:#c4b89a; --muted:#756a58;
+      --goldLight:rgba(232,168,32,.10);
+      --goldGlow:rgba(232,168,32,.15);
+      --sh1:0 1px 3px rgba(0,0,0,.2),0 6px 18px rgba(0,0,0,.2);
+      --sh2:0 2px 8px rgba(0,0,0,.24),0 14px 36px rgba(0,0,0,.22);
+      --sh3:0 4px 20px rgba(0,0,0,.3),0 28px 64px rgba(0,0,0,.26);
     }
 
-    *{box-sizing:border-box}
+    /* ── RESET ──────────────────────────────────────── */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{
-      margin:0;
-      min-height:100vh;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(167,139,250,.18), transparent 35%),
-        radial-gradient(circle at top right, rgba(16,185,129,.12), transparent 30%),
-        linear-gradient(180deg, var(--bg), var(--bg-soft));
-      color:var(--text);
-      transition:background .25s ease, color .25s ease;
+      font-family:'Outfit',ui-sans-serif,system-ui,sans-serif;
+      background:var(--bg);color:var(--text);min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      transition:background .35s var(--ease2),color .35s var(--ease2);
+      overflow-x:hidden;
     }
-
-    button,input{font:inherit}
+    button,input,select,textarea{font:inherit}
     button{cursor:pointer}
-    .hidden{display:none !important}
+    a{text-decoration:none;color:inherit}
+    .hidden{display:none!important}
 
+    /* ── AMBIENT BG ─────────────────────────────────── */
+    body::before{
+      content:'';position:fixed;inset:0;
+      pointer-events:none;z-index:0;
+      background:
+        radial-gradient(ellipse 70% 55% at  0%  0%,rgba(245,200,74,.22),transparent 50%),
+        radial-gradient(ellipse 50% 45% at 100% 0%,rgba(31,122,82,.10),transparent 50%),
+        radial-gradient(ellipse 60% 50% at  50% 100%,rgba(201,136,10,.07),transparent 55%);
+      animation:ambPulse 20s ease-in-out infinite alternate;
+    }
+    @keyframes ambPulse{
+      0%{opacity:1;transform:scale(1)}
+      100%{opacity:.75;transform:scale(1.05) translateY(-8px)}
+    }
+
+    /* ── UTILS ──────────────────────────────────────── */
+    .muted{color:var(--muted)} .s{font-size:12px} .k{font-weight:700}
+    .hr{height:1px;background:var(--line);margin:14px 0}
+    .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .stack,.list{display:grid;gap:10px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid--4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+    /* stagger */
+    .stagger>*{animation:fadeUp .5s var(--ease2) both}
+    .stagger>*:nth-child(1){animation-delay:.04s}
+    .stagger>*:nth-child(2){animation-delay:.09s}
+    .stagger>*:nth-child(3){animation-delay:.14s}
+    .stagger>*:nth-child(4){animation-delay:.19s}
+    .stagger>*:nth-child(5){animation-delay:.24s}
+    .stagger>*:nth-child(6){animation-delay:.29s}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+    /* ════════════════════════════════════════════════
+       AUTH
+    ════════════════════════════════════════════════ */
     .authWrap{
+      position:relative;z-index:1;
       min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
+      display:flex;align-items:center;justify-content:center;
+      padding:32px 18px;
     }
-
     .authCard{
-      width:100%;
-      max-width:440px;
-      background:rgba(255,255,255,.88);
-      backdrop-filter:blur(12px);
-      border:1px solid rgba(255,255,255,.75);
-      box-shadow:var(--shadow-2);
-      border-radius:28px;
-      padding:28px;
+      width:100%;max-width:430px;
+      background:rgba(255,255,255,.80);
+      border:1px solid rgba(255,255,255,.85);
+      backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+      border-radius:var(--r3);box-shadow:var(--sh3);
+      padding:34px 32px;
+      animation:cardDrop .65s var(--ease) both;
     }
+    body.theme-dark .authCard{background:rgba(26,23,16,.86);border-color:rgba(255,255,255,.05)}
+    @keyframes cardDrop{from{opacity:0;transform:translateY(28px) scale(.96)}to{opacity:1;transform:none}}
 
-    body.theme-dark .authCard{
-      background:rgba(17,24,39,.88);
-      border-color:rgba(255,255,255,.06);
+    .auth-brand{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+    .auth-logo{
+      width:56px;height:56px;border-radius:17px;
+      display:grid;place-items:center;flex-shrink:0;
+      font-family:'Syne',sans-serif;font-weight:900;font-size:17px;
+      color:#18150f;
+      background:linear-gradient(135deg,var(--gold3),var(--gold2));
+      box-shadow:0 8px 22px var(--goldGlow),0 2px 6px rgba(201,136,10,.15);
+      position:relative;overflow:hidden;
     }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      margin-bottom:20px;
+    .auth-logo::after{
+      content:'';position:absolute;inset:0;border-radius:inherit;
+      background:linear-gradient(135deg,rgba(255,255,255,.38) 0%,transparent 55%);
     }
-
-    .logo{
-      width:56px;
-      height:56px;
-      border-radius:18px;
-      display:grid;
-      place-items:center;
-      color:#fff;
-      font-weight:900;
-      letter-spacing:.04em;
-      background:linear-gradient(135deg,var(--primary),var(--green));
-      box-shadow:0 10px 25px rgba(124,58,237,.25);
-      flex:0 0 auto;
-    }
-
-    .title{
-      margin:0;
-      font-size:26px;
-      font-weight:900;
-      line-height:1.1;
-    }
-
-    .sub{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.45;
-    }
+    .auth-eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+    .auth-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:900;line-height:1.05;letter-spacing:-.02em;margin:3px 0 2px}
+    .auth-sub{color:var(--muted);font-size:13px;line-height:1.45}
 
     .tabs{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin:18px 0;
+      display:grid;grid-template-columns:1fr 1fr;
+      background:var(--bg2);border:1px solid var(--line);
+      border-radius:var(--r);padding:4px;margin:20px 0 18px;
     }
-
     .tabBtn{
-      border:none;
-      border-radius:14px;
-      padding:12px 14px;
-      font-weight:800;
-      background:#eef2ff;
-      color:#4b5563;
-      transition:.2s ease;
+      border:none;border-radius:11px;padding:11px;
+      background:transparent;color:var(--muted);
+      font-weight:600;font-size:14px;transition:all .22s var(--ease2);
     }
+    .tabBtn.active{background:var(--panel);color:var(--text);font-weight:700;box-shadow:var(--sh1)}
 
-    body.theme-dark .tabBtn{
-      background:#1f2937;
-      color:#cbd5e1;
-    }
-
-    .tabBtn.active{
-      background:linear-gradient(135deg,var(--primary),var(--primary2));
-      color:#fff;
-    }
-
-    .form{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-
+    .form{display:grid;gap:13px}
+    .field{display:grid;gap:6px}
+    .field-label{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted)}
     .input{
-      width:100%;
-      border:1px solid var(--line);
-      background:var(--card);
-      color:var(--text);
-      border-radius:14px;
-      padding:13px 14px;
-      font-size:15px;
-      outline:none;
-      transition:.2s ease;
+      width:100%;border:1.5px solid var(--line);background:var(--panel2);
+      color:var(--text);border-radius:var(--r);padding:13px 15px;
+      font-size:15px;outline:none;
+      transition:border-color .18s,box-shadow .18s,background .18s;
     }
+    .input::placeholder{color:var(--muted);opacity:.7}
+    .input:focus{border-color:var(--gold2);background:var(--panel);box-shadow:0 0 0 4px rgba(232,168,32,.13)}
+    .msg{min-height:18px;font-size:13px;color:var(--muted);padding:1px 2px}
 
-    .input:focus{
-      border-color:var(--primary2);
-      box-shadow:0 0 0 4px rgba(167,139,250,.14);
-    }
-
+    /* ── BUTTONS ────────────────────────────────────── */
     .btn{
-      border:none;
-      border-radius:14px;
-      padding:13px 14px;
-      font-weight:800;
-      color:#fff;
-      background:linear-gradient(135deg,var(--primary),var(--green));
-      box-shadow:0 10px 20px rgba(124,58,237,.18);
-      transition:.2s ease;
+      border:none;border-radius:var(--r);
+      padding:13px 18px;font-weight:700;font-size:15px;
+      transition:all .2s var(--ease2);position:relative;overflow:hidden;
     }
-
-    .btn:hover{
-      transform:translateY(-1px);
+    .btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .18s;border-radius:inherit}
+    .btn:hover::after{background:rgba(255,255,255,.08)}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0) scale(.99)}
+    .btn--block{width:100%}
+    .btn--gold{
+      background:linear-gradient(135deg,var(--gold3) 0%,var(--gold2) 55%,var(--gold) 100%);
+      color:#18150f;box-shadow:0 6px 18px var(--goldGlow),0 2px 5px rgba(201,136,10,.12);
     }
+    .btn--gold:hover{box-shadow:0 10px 28px var(--goldGlow),0 3px 8px rgba(201,136,10,.18)}
+    .btn--ghost{background:var(--panel);color:var(--text);border:1.5px solid var(--line);box-shadow:var(--sh1)}
+    .btn--ghost:hover{border-color:var(--gold2)}
+    .btn--danger{background:rgba(184,50,50,.08);color:var(--red);border:1.5px solid rgba(184,50,50,.18)}
+    .btn--danger:hover{background:rgba(184,50,50,.14)}
+    .btn--small{padding:9px 13px;font-size:13px}
 
-    .msg{
-      min-height:20px;
-      font-size:14px;
-      color:var(--muted);
-      margin:0;
-    }
+    /* ════════════════════════════════════════════════
+       APP SHELL
+    ════════════════════════════════════════════════ */
+    #appShell{position:relative;z-index:1;min-height:100vh}
+    .app{min-height:100vh;display:grid;grid-template-columns:var(--sideW) 1fr}
 
-    .app{
-      min-height:100vh;
-      display:grid;
-      grid-template-columns:280px 1fr;
-    }
-
+    /* ════════════════════════════════════════════════
+       SIDEBAR
+    ════════════════════════════════════════════════ */
     .sidebar{
-      background:rgba(255,255,255,.82);
-      backdrop-filter:blur(14px);
+      position:sticky;top:0;height:100vh;
+      overflow-y:auto;scrollbar-width:none;
+      padding:16px 12px;
+      display:flex;flex-direction:column;gap:4px;
+      background:rgba(255,255,255,.68);
+      backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
       border-right:1px solid var(--line);
-      padding:20px;
-      position:sticky;
-      top:0;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      gap:18px;
+      animation:sideIn .5s var(--ease2) both;
     }
-
-    body.theme-dark .sidebar{
-      background:rgba(15,23,42,.84);
-    }
+    .sidebar::-webkit-scrollbar{display:none}
+    body.theme-dark .sidebar{background:rgba(13,11,8,.80)}
+    @keyframes sideIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
 
     .sideBrand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px;
-      border-radius:20px;
-      background:var(--card);
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
+      display:flex;align-items:center;gap:12px;
+      padding:13px;border-radius:var(--r2);
+      background:var(--panel);border:1px solid var(--line);
+      box-shadow:var(--sh1);margin-bottom:8px;
+      transition:box-shadow .2s;
+    }
+    .sideBrand:hover{box-shadow:var(--sh2)}
+    .side-logo{
+      width:42px;height:42px;border-radius:13px;
+      display:grid;place-items:center;flex-shrink:0;
+      font-family:'Syne',sans-serif;font-weight:900;font-size:14px;
+      color:#18150f;
+      background:linear-gradient(135deg,var(--gold3),var(--gold2));
+      box-shadow:0 4px 12px var(--goldGlow);
+    }
+    .sideTitle{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:-.01em}
+    .sideSub{margin-top:2px;font-size:11px;color:var(--muted)}
+
+    .nav-label{
+      font-size:10px;font-weight:700;letter-spacing:.13em;
+      text-transform:uppercase;color:var(--muted);
+      padding:10px 10px 4px;
     }
 
-    .sideBrandText{
-      min-width:0;
-    }
+    .sideMenu{display:flex;flex-direction:column;gap:3px}
 
-    .sideTitle{
-      font-weight:900;
-      line-height:1.1;
-    }
-
-    .sideSub{
-      margin-top:4px;
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .sideMenu{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
+    /* nav items — keeping .navBtn for app.js compatibility */
     .navBtn{
-      border:none;
-      background:var(--card);
-      border:1px solid var(--line);
-      color:var(--text);
-      border-radius:16px;
-      padding:13px 14px;
-      text-align:left;
-      font-weight:800;
-      transition:.2s ease;
+      width:100%;text-align:left;
+      border:1.5px solid transparent;
+      background:transparent;color:var(--text2);
+      border-radius:var(--r);
+      padding:11px 13px;
+      font-weight:500;font-size:14px;
+      display:flex;align-items:center;gap:11px;
+      transition:all .2s var(--ease2);
+      position:relative;
     }
-
-    .navBtn:hover,
+    .nav-icon{
+      width:30px;height:30px;border-radius:9px;
+      display:grid;place-items:center;font-size:15px;
+      background:var(--bg2);border:1px solid var(--line);
+      transition:all .2s;flex-shrink:0;
+    }
+    .navBtn:hover{background:var(--panel2);border-color:var(--line);color:var(--text)}
+    .navBtn:hover .nav-icon{background:var(--goldLight);border-color:rgba(232,168,32,.3)}
     .navBtn.active{
-      background:linear-gradient(135deg, rgba(124,58,237,.12), rgba(16,185,129,.10));
-      border-color:rgba(124,58,237,.25);
-      color:var(--text);
-      transform:translateY(-1px);
+      background:linear-gradient(135deg,rgba(245,200,74,.22),rgba(232,168,32,.08));
+      border-color:rgba(232,168,32,.38);
+      color:var(--text);font-weight:600;
+      box-shadow:0 2px 10px rgba(201,136,10,.10);
+    }
+    .navBtn.active .nav-icon{
+      background:linear-gradient(135deg,var(--gold3),var(--gold2));
+      border-color:transparent;
+      box-shadow:0 3px 8px var(--goldGlow);
+    }
+    .navBtn.active::before{
+      content:'';position:absolute;left:-12px;top:50%;
+      width:3px;height:58%;border-radius:3px;
+      background:linear-gradient(180deg,var(--gold3),var(--gold));
+      transform:translateY(-50%);
     }
 
     .sidebarBottom{
-      margin-top:auto;
-      display:grid;
-      gap:12px;
-      padding:14px;
-      border-radius:20px;
-      background:var(--card);
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
+      margin-top:auto;display:grid;gap:8px;
+      padding:13px;border-radius:var(--r2);
+      background:var(--panel);border:1px solid var(--line);
+      box-shadow:var(--sh1);
     }
+    .side-user{
+      display:flex;align-items:center;gap:10px;
+      padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:2px;
+    }
+    .side-avatar{
+      width:34px;height:34px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--gold3),var(--gold2));
+      display:grid;place-items:center;
+      font-family:'Syne',sans-serif;font-weight:800;font-size:13px;
+      color:#18150f;box-shadow:0 3px 10px var(--goldGlow);
+    }
+    .side-uname{font-weight:700;font-size:13px;line-height:1.2}
+    .side-urole{font-size:11px;color:var(--muted);margin-top:2px}
 
-    .themeCardBtn,
-    .logoutBtn{
-      width:100%;
-      border:none;
-      border-radius:14px;
-      padding:12px 14px;
-      font-weight:800;
-      transition:.2s ease;
+    .side-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .themeCardBtn,.logoutBtn{
+      border-radius:var(--r);padding:10px;
+      font-weight:600;font-size:12px;text-align:center;
+      transition:all .2s;border:1.5px solid var(--line);
     }
+    .themeCardBtn{background:var(--panel2);color:var(--text2)}
+    .themeCardBtn:hover{border-color:var(--gold2);color:var(--text)}
+    .logoutBtn{background:rgba(184,50,50,.07);color:var(--red);border-color:rgba(184,50,50,.18)}
+    .logoutBtn:hover{background:rgba(184,50,50,.13)}
 
-    .themeCardBtn{
-      background:linear-gradient(135deg,#eef2ff,#ecfeff);
-      color:#4c1d95;
-      border:1px solid #ddd6fe;
-    }
-
-    body.theme-dark .themeCardBtn{
-      background:linear-gradient(135deg,#1e293b,#0f172a);
-      color:#e2e8f0;
-      border:1px solid #334155;
-    }
-
-    .logoutBtn{
-      background:#fff1f2;
-      color:#be123c;
-      border:1px solid #fecdd3;
-    }
-
-    body.theme-dark .logoutBtn{
-      background:#3f1d24;
-      color:#fecdd3;
-      border:1px solid #5f2835;
-    }
-
-    .main{
-      padding:24px;
-      min-width:0;
-    }
+    /* ════════════════════════════════════════════════
+       MAIN
+    ════════════════════════════════════════════════ */
+    .main{min-width:0;display:flex;flex-direction:column;min-height:100vh}
 
     .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:22px;
-      flex-wrap:wrap;
+      position:sticky;top:0;z-index:10;
+      min-height:68px;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:14px;flex-wrap:wrap;
+      padding:12px 22px;
+      background:rgba(247,245,242,.88);
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--line);
     }
+    body.theme-dark .topbar{background:rgba(13,11,8,.86)}
 
-    .pageTitle{
-      margin:0;
-      font-size:30px;
-      font-weight:900;
-      line-height:1.1;
-    }
+    .pageTitle{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+    .welcome{margin-top:3px;font-size:13px;color:var(--muted)}
 
-    .welcome{
-      color:var(--muted);
-      margin-top:6px;
-      font-size:14px;
-    }
-
-    .topbarActions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
+    .topbarActions{display:flex;gap:10px;align-items:center}
     .themeTopBtn{
-      border:none;
-      background:var(--card);
-      color:var(--text);
-      border:1px solid var(--line);
-      padding:11px 16px;
-      border-radius:999px;
-      font-weight:800;
-      box-shadow:var(--shadow);
-      transition:.2s ease;
+      border:1.5px solid var(--line);background:var(--panel);color:var(--text);
+      border-radius:999px;padding:9px 16px;
+      font-weight:600;font-size:13px;box-shadow:var(--sh1);
+      transition:all .2s;
     }
+    .themeTopBtn:hover{border-color:var(--gold2);transform:translateY(-1px)}
 
-    .themeTopBtn:hover{
-      transform:translateY(-1px);
-    }
+    /* pages */
+    .main > .main-pages,
+    .main > section.page,
+    .main-pages{flex:1;padding:20px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 
-    .page{
-      display:none;
-    }
+    /* wrap pages in a container so padding works */
+    .pages-wrap{flex:1;padding:20px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 
-    .page.active{
-      display:block;
-    }
+    .page{display:none}
+    .page.active{display:block;animation:pageIn .38s var(--ease2) both}
+    @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0, 1fr));
-      gap:18px;
-    }
-
+    /* ════════════════════════════════════════════════
+       CARDS
+    ════════════════════════════════════════════════ */
     .card{
-      background:rgba(255,255,255,.92);
-      border:1px solid rgba(255,255,255,.9);
-      box-shadow:var(--shadow);
-      border-radius:24px;
-      padding:22px;
+      border:1.5px solid var(--line);background:var(--panel);
+      border-radius:var(--r2);padding:20px;box-shadow:var(--sh1);
+      transition:box-shadow .22s var(--ease2),border-color .22s;
+      position:relative;overflow:hidden;
     }
-
-    body.theme-dark .card{
-      background:rgba(17,24,39,.92);
-      border-color:rgba(255,255,255,.06);
+    .card:hover{box-shadow:var(--sh2)}
+    .card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent 0%,var(--gold3) 50%,transparent 100%);
+      opacity:0;transition:opacity .3s;
     }
-
-    .card h3{
-      margin:0 0 10px;
-      font-size:18px;
+    .card:hover::before{opacity:.55}
+    .card--gold{
+      background:linear-gradient(135deg,rgba(245,200,74,.12),rgba(232,168,32,.04),var(--panel));
+      border-color:rgba(232,168,32,.28);
     }
+    .card__head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+    .card__title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;letter-spacing:-.01em}
+    .card__big{font-family:'Syne',sans-serif;font-size:30px;font-weight:900;line-height:1.05;letter-spacing:-.03em}
 
-    .big{
-      font-size:34px;
-      font-weight:900;
-      margin:6px 0;
-      line-height:1.1;
-    }
+    /* grid */
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 
-    .muted{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.5;
-    }
-
-    .list{
-      display:grid;
-      gap:12px;
-      margin-top:14px;
-    }
-
+    /* items */
     .item{
-      padding:14px;
-      border-radius:16px;
-      background:var(--card-2);
-      border:1px solid var(--line);
+      padding:14px;border-radius:var(--r);
+      background:var(--panel2);border:1.5px solid var(--line);
+      transition:all .18s;
     }
+    .item:hover{border-color:rgba(232,168,32,.3);background:var(--panel)}
 
+    /* badge */
+    .badge{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.02em;border:1.5px solid var(--line);background:var(--panel2)}
+    .badge--gold{background:linear-gradient(135deg,rgba(245,200,74,.35),rgba(255,255,255,.9));border-color:rgba(232,168,32,.38);color:#8a5a00}
+    body.theme-dark .badge--gold{background:linear-gradient(135deg,rgba(245,200,74,.18),rgba(26,23,16,.8));color:var(--gold3)}
+
+    /* progress */
+    .progress{width:100%;height:7px;background:var(--bg2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+    .progress>span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold3),var(--gold2),var(--gold));transition:width 1s var(--ease);box-shadow:0 1px 5px rgba(201,136,10,.25)}
+
+    /* exercise */
+    .exercise{display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;padding:13px;border:1.5px solid var(--line);border-radius:18px;background:var(--panel2);transition:all .2s var(--ease2)}
+    .exercise:hover{border-color:rgba(232,168,32,.35);background:var(--panel);box-shadow:var(--sh1);transform:translateX(4px)}
+    .exercise__ico{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:linear-gradient(135deg,rgba(245,200,74,.35),rgba(232,168,32,.10));flex-shrink:0}
+    .exercise__t{font-weight:700;font-size:14px}
+    .exercise__s{margin-top:3px;font-size:12px;color:var(--muted)}
+
+    /* feat */
+    .feat{padding:16px;border:1.5px solid var(--line);border-radius:18px;background:var(--panel2);transition:all .2s var(--ease2)}
+    .feat:hover{border-color:rgba(232,168,32,.35);background:var(--panel);box-shadow:var(--sh1);transform:translateY(-2px)}
+
+    /* miniGrid */
+    .miniGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+    .miniStat{padding:14px;border:1.5px solid var(--line);border-radius:var(--r);background:var(--panel2);transition:border-color .2s}
+    .miniStat:hover{border-color:var(--gold2)}
+
+    /* hero card */
     .heroCard{
-      margin-bottom:18px;
-      padding:24px;
-      border-radius:28px;
-      background:
-        radial-gradient(circle at top right, rgba(255,255,255,.35), transparent 32%),
-        linear-gradient(135deg, rgba(124,58,237,.95), rgba(16,185,129,.88));
-      color:#fff;
-      box-shadow:var(--shadow-2);
+      margin-bottom:18px;padding:26px;border-radius:var(--r3);
+      background:linear-gradient(135deg,#c9880a 0%,#e8a820 40%,#f5c84a 100%);
+      color:#18150f;box-shadow:0 10px 40px rgba(201,136,10,.28);
+      position:relative;overflow:hidden;
     }
+    .heroCard::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(255,255,255,.3),transparent 55%);pointer-events:none}
+    .heroCard h3{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+    .heroCard h2{font-family:'Syne',sans-serif;margin:0;font-size:30px;line-height:1.12;font-weight:900;letter-spacing:-.02em;max-width:640px}
+    .heroCard p{margin:10px 0 0;max-width:680px;line-height:1.6;opacity:.85}
 
-    .heroCard h3{
-      margin:0 0 10px;
-      font-size:16px;
-      font-weight:800;
-      opacity:.92;
-    }
+    /* islamic */
+    .bismillah,.hadithLine,.motivation{border:1.5px solid var(--line);border-radius:var(--r2);padding:18px 20px;background:var(--panel);box-shadow:var(--sh1);position:relative;overflow:hidden}
+    .bismillah{margin-bottom:16px}.hadithLine{margin-bottom:16px}
+    .bismillah::before,.hadithLine::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold3),var(--gold))}
+    .bismillah__arabic{font-size:26px;font-weight:900;line-height:1.4;direction:rtl}
+    .bismillah__sub,.hadithLine__t,.motivation__by{margin-top:7px;color:var(--muted);font-size:13px;line-height:1.5}
+    .hadithLine__k,.motivation__k{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gold)}
+    .motivation__q{margin-top:8px;font-size:17px;font-weight:700;line-height:1.45;font-style:italic}
 
-    .heroCard h2{
-      margin:0;
-      font-size:32px;
-      line-height:1.15;
-      font-weight:900;
-      max-width:680px;
-    }
+    /* toast */
+    .toastHost{position:fixed;top:18px;right:18px;z-index:80;display:grid;gap:10px;pointer-events:none}
+    .toast{min-width:240px;max-width:320px;padding:14px 16px;border-radius:18px;background:var(--panel);border:1.5px solid var(--line);box-shadow:var(--sh2);pointer-events:auto;animation:toastIn .3s var(--ease) both}
+    @keyframes toastIn{from{opacity:0;transform:translateX(22px) scale(.95)}to{opacity:1;transform:none}}
+    .toast__t{font-weight:800;margin-bottom:4px;font-size:14px}
+    .toast__s{font-size:13px;color:var(--muted)}
 
-    .heroCard p{
-      margin:12px 0 0;
-      max-width:700px;
-      line-height:1.6;
-      opacity:.95;
-    }
+    /* chat */
+    .chat{display:grid;gap:12px;padding:14px 0;max-height:400px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+    .msg{background:var(--panel2);border:1.5px solid var(--line);border-radius:18px 18px 18px 5px;padding:13px 16px;max-width:80%;font-size:14px;line-height:1.55;animation:msgIn .25s var(--ease2) both}
+    .msg--user{margin-left:auto;background:linear-gradient(135deg,rgba(245,200,74,.2),rgba(232,168,32,.07));border-color:rgba(232,168,32,.28);border-radius:18px 18px 5px 18px}
+    @keyframes msgIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+    .msg__meta{font-size:11px;color:var(--muted);margin-top:6px;font-weight:600}
+    .chatForm{display:flex;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+    .chatForm .input{flex:1}
+    .aiChips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .aiChip{padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel2);font-size:13px;font-weight:600;color:var(--text2);transition:all .18s var(--ease2)}
+    .aiChip:hover{border-color:var(--gold2);background:linear-gradient(135deg,rgba(245,200,74,.18),rgba(232,168,32,.05));color:var(--text);transform:translateY(-1px)}
 
-    @media (max-width: 980px){
+    /* scrollbar */
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+    ::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media(max-width:1100px){.grid--4,.grid3{grid-template-columns:1fr 1fr}}
+    @media(max-width:900px){
       .app{grid-template-columns:1fr}
-      .sidebar{
-        position:static;
-        height:auto;
-      }
-      .grid{grid-template-columns:1fr 1fr}
+      .sidebar{position:static;height:auto}
+      .navBtn.active::before{display:none}
     }
-
-    @media (max-width: 700px){
-      .grid{grid-template-columns:1fr}
-      .main{padding:16px}
-      .authCard{padding:22px}
-      .pageTitle{font-size:24px}
-      .heroCard h2{font-size:26px}
+    @media(max-width:700px){
+      .grid,.grid2,.grid3,.grid--4,.miniGrid{grid-template-columns:1fr}
+      .pages-wrap{padding:14px}
+      .topbar{padding:12px 14px}
+      .authCard{padding:24px 20px}
+      .heroCard h2{font-size:24px}
       .topbarActions{width:100%}
-      .themeTopBtn{width:100%}
+      .themeTopBtn{flex:1}
     }
   </style>
 </head>
 <body>
 
-  <!-- AUTH -->
-  <section id="authGate" class="authWrap">
-    <div class="authCard">
-      <div class="brand">
-        <div class="logo">LG</div>
-        <div>
-          <h1 class="title">Luxury Gym</h1>
-          <p class="sub">Premium fitness dashboard with clean login and modern layout.</p>
-        </div>
+<!-- ═══════════════════════════════════ AUTH ════════════ -->
+<section id="authGate" class="authWrap">
+  <div class="authCard">
+
+    <div class="auth-brand">
+      <div class="auth-logo">LG</div>
+      <div>
+        <div class="auth-eyebrow">Premium Fitness</div>
+        <h1 class="auth-title">Luxury Gym</h1>
+        <p class="auth-sub">Your premium fitness dashboard.</p>
       </div>
-
-      <div class="tabs">
-        <button id="showLoginBtn" class="tabBtn active" type="button">Login</button>
-        <button id="showSignupBtn" class="tabBtn" type="button">Sign Up</button>
-      </div>
-
-      <form id="loginForm" class="form">
-        <input class="input" id="loginEmail" type="email" placeholder="Email" required />
-        <input class="input" id="loginPass" type="password" placeholder="Password" required />
-        <button class="btn" type="submit">Login</button>
-        <p id="authMsg" class="msg"></p>
-      </form>
-
-      <form id="signupForm" class="form hidden">
-        <input class="input" id="signupName" type="text" placeholder="Full name" required />
-        <input class="input" id="signupEmail" type="email" placeholder="Email" required />
-        <input class="input" id="signupPass" type="password" placeholder="Password" required />
-        <button class="btn" type="submit">Create Account</button>
-        <p id="authMsg2" class="msg"></p>
-      </form>
     </div>
-  </section>
 
-  <!-- APP -->
-  <div id="appShell" class="app hidden">
+    <div class="tabs">
+      <button id="showLoginBtn" class="tabBtn active" type="button">Login</button>
+      <button id="showSignupBtn" class="tabBtn" type="button">Sign Up</button>
+    </div>
+
+    <form id="loginForm" class="form">
+      <div class="field">
+        <span class="field-label">Email address</span>
+        <input class="input" id="loginEmail" type="email" placeholder="you@example.com" required/>
+      </div>
+      <div class="field">
+        <span class="field-label">Password</span>
+        <input class="input" id="loginPass" type="password" placeholder="••••••••" required/>
+      </div>
+      <button class="btn btn--gold btn--block" type="submit">Login →</button>
+      <p id="authMsg" class="msg"></p>
+    </form>
+
+    <form id="signupForm" class="form hidden">
+      <div class="field">
+        <span class="field-label">Full name</span>
+        <input class="input" id="signupName" type="text" placeholder="Ahmad Ali" required/>
+      </div>
+      <div class="field">
+        <span class="field-label">Email address</span>
+        <input class="input" id="signupEmail" type="email" placeholder="you@example.com" required/>
+      </div>
+      <div class="field">
+        <span class="field-label">Password</span>
+        <input class="input" id="signupPass" type="password" placeholder="Min 8 characters" required/>
+      </div>
+      <button class="btn btn--gold btn--block" type="submit">Create Account →</button>
+      <p id="authMsg2" class="msg"></p>
+    </form>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ APP ════════════ -->
+<div id="appShell" class="hidden">
+  <div class="app">
+
+    <!-- SIDEBAR -->
     <aside class="sidebar">
+
       <div class="sideBrand">
-        <div class="logo">LG</div>
-        <div class="sideBrandText">
+        <div class="side-logo">LG</div>
+        <div>
           <div class="sideTitle">Luxury Gym</div>
-          <div class="sideSub">Fitness dashboard</div>
+          <div class="sideSub">Fitness Dashboard</div>
         </div>
       </div>
+
+      <div class="nav-label">Navigation</div>
 
       <nav class="sideMenu">
-        <button class="navBtn active" data-page="dashboard" type="button">Dashboard</button>
-        <button class="navBtn" data-page="workouts" type="button">Workouts</button>
-        <button class="navBtn" data-page="nutrition" type="button">Nutrition</button>
-        <button class="navBtn" data-page="progress" type="button">Progress</button>
-        <button class="navBtn" data-page="ai" type="button">AI Coach</button>
-        <button class="navBtn" data-page="settings" type="button">Settings</button>
+        <button class="navBtn active" data-page="dashboard" type="button">
+          <span class="nav-icon">🏠</span> Dashboard
+        </button>
+        <button class="navBtn" data-page="workouts" type="button">
+          <span class="nav-icon">💪</span> Workouts
+        </button>
+        <button class="navBtn" data-page="nutrition" type="button">
+          <span class="nav-icon">🥗</span> Nutrition
+        </button>
+        <button class="navBtn" data-page="progress" type="button">
+          <span class="nav-icon">📈</span> Progress
+        </button>
+        <button class="navBtn" data-page="settings" type="button">
+          <span class="nav-icon">⚙️</span> Settings
+        </button>
       </nav>
 
       <div class="sidebarBottom">
-        <button id="themeToggle" class="themeCardBtn" type="button">Theme: Light</button>
-        <button id="btnLogout" class="logoutBtn" type="button">Logout</button>
+        <div class="side-user">
+          <div class="side-avatar" id="sideAvatar">A</div>
+          <div>
+            <div class="side-uname" id="userLabel">User</div>
+            <div class="side-urole">Member</div>
+          </div>
+        </div>
+        <div class="side-actions">
+          <button id="themeToggle" class="themeCardBtn" type="button">🌙 Theme</button>
+          <button id="btnLogout" class="logoutBtn" type="button">← Logout</button>
+        </div>
       </div>
+
     </aside>
 
+    <!-- MAIN -->
     <main class="main">
+
       <div class="topbar">
         <div>
           <h2 class="pageTitle" id="pageTitle">Dashboard</h2>
-          <div class="welcome">Welcome back, <span id="userLabel">User</span></div>
+          <div class="welcome">Welcome back, <span id="userLabelTop">User</span> 👋</div>
         </div>
-
         <div class="topbarActions">
-          <button id="themeToggleTop" class="themeTopBtn" type="button">Theme Control</button>
+          <button id="themeToggleTop" class="themeTopBtn" type="button">Switch Theme</button>
         </div>
       </div>
 
-     <section id="page-dashboard" class="page active">
-  <div id="dashboardMount"></div>
-</section>
+      <div class="pages-wrap">
 
-      <section id="page-workouts" class="page"></section>
+        <section id="page-dashboard" class="page active">
+          <div id="dashboardMount"></div>
+        </section>
 
-      <section id="page-nutrition" class="page">
-        <div class="card">
-          <h3>Nutrition</h3>
-          <div class="list">
-            <div class="item">Breakfast: Oats + Eggs</div>
-            <div class="item">Lunch: Rice + Chicken</div>
-            <div class="item">Dinner: Beef + Salad</div>
+        <section id="page-workouts" class="page"></section>
+
+        <section id="page-nutrition" class="page">
+          <div class="card">
+            <div class="card__head"><div class="card__title">Nutrition Plan</div></div>
+            <div class="stack">
+              <div class="item">🌅 Breakfast: Oats + Eggs + Banana</div>
+              <div class="item">☀️ Lunch: Rice + Grilled Chicken + Salad</div>
+              <div class="item">🌙 Dinner: Beef + Vegetables + Greek Yogurt</div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="page-progress" class="page">
-        <div class="card">
-          <h3>Progress</h3>
-          <div class="list">
-            <div class="item">Weight chart area will come here.</div>
-            <div class="item">Measurements and body stats will come here.</div>
+        <section id="page-progress" class="page">
+          <div class="card">
+            <div class="card__head"><div class="card__title">Progress Tracker</div></div>
+            <div class="stack">
+              <div class="item">📊 Weight chart coming soon.</div>
+              <div class="item">📏 Body measurements coming soon.</div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="page-ai" class="page">
-        <div class="card">
-          <h3>AI Coach</h3>
-          <div class="list">
-            <div class="item">AI workout suggestions will come here.</div>
-            <div class="item">AI meal guidance will come here.</div>
+        <section id="page-settings" class="page">
+          <div class="card">
+            <div class="card__head"><div class="card__title">Settings</div></div>
+            <div class="stack">
+              <div class="item">🎨 Theme toggle is active above.</div>
+              <div class="item">👤 Profile editing coming soon.</div>
+              <div class="item">🔔 Notifications coming soon.</div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="page-settings" class="page">
-        <div class="card">
-          <h3>Settings</h3>
-          <div class="list">
-            <div class="item">Theme switch is already added.</div>
-            <div class="item">Profile editing will be added next.</div>
-            <div class="item">Notifications and preferences later.</div>
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
   </div>
+</div>
+
+<!-- toast host -->
+<div class="toastHost" id="toastHost"></div>
+
+<!-- SCRIPTS -->
 <script src="js/storage.js"></script>
 <script src="js/pages/dashboard.js"></script>
 <script src="js/pages/workouts.js"></script>
@@ -593,7 +639,20 @@
 <script src="js/pages/progress.js"></script>
 <script src="js/pages/settings.js"></script>
 <script src="js/app.js"></script>
-  
-  </script>
+
+<!-- sync avatar + top username -->
+<script>
+(function(){
+  function syncUser(){
+    var lbl = document.getElementById('userLabel');
+    var top = document.getElementById('userLabelTop');
+    var av  = document.getElementById('sideAvatar');
+    if(lbl && top) top.textContent = lbl.textContent;
+    if(lbl && av)  av.textContent  = (lbl.textContent||'U')[0].toUpperCase();
+  }
+  var el = document.getElementById('userLabel');
+  if(el) new MutationObserver(syncUser).observe(el,{childList:true,subtree:true,characterData:true});
+})();
+</script>
 </body>
 </html>
