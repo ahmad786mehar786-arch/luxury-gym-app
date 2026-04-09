@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Luxury Gym</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --bg-soft:#eef3f9;
+      --card:#ffffff;
+      --card-2:#f9fbff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --primary:#7c3aed;
+      --primary2:#a78bfa;
+      --green:#10b981;
+      --danger:#ef4444;
+      --shadow:0 10px 30px rgba(31,41,55,.08);
+      --shadow-2:0 16px 40px rgba(31,41,55,.10);
+      --radius:18px;
+    }
+
+    body.theme-dark{
+      --bg:#0f172a;
+      --bg-soft:#111827;
+      --card:#111827;
+      --card-2:#182233;
+      --text:#f8fafc;
+      --muted:#94a3b8;
+      --line:#263244;
+      --shadow:0 10px 30px rgba(0,0,0,.28);
+      --shadow-2:0 16px 40px rgba(0,0,0,.36);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(167,139,250,.18), transparent 35%),
+        radial-gradient(circle at top right, rgba(16,185,129,.12), transparent 30%),
+        linear-gradient(180deg, var(--bg), var(--bg-soft));
+      color:var(--text);
+      transition:background .25s ease, color .25s ease;
+    }
+
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none !important}
+
+    .authWrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .authCard{
+      width:100%;
+      max-width:440px;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.75);
+      box-shadow:var(--shadow-2);
+      border-radius:28px;
+      padding:28px;
+    }
+
+    body.theme-dark .authCard{
+      background:rgba(17,24,39,.88);
+      border-color:rgba(255,255,255,.06);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:20px;
+    }
+
+    .logo{
+      width:56px;
+      height:56px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-weight:900;
+      letter-spacing:.04em;
+      background:linear-gradient(135deg,var(--primary),var(--green));
+      box-shadow:0 10px 25px rgba(124,58,237,.25);
+      flex:0 0 auto;
+    }
+
+    .title{
+      margin:0;
+      font-size:26px;
+      font-weight:900;
+      line-height:1.1;
+    }
+
+    .sub{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    .tabs{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin:18px 0;
+    }
+
+    .tabBtn{
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:800;
+      background:#eef2ff;
+      color:#4b5563;
+      transition:.2s ease;
+    }
+
+    body.theme-dark .tabBtn{
+      background:#1f2937;
+      color:#cbd5e1;
+    }
+
+    .tabBtn.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
+      color:#fff;
+    }
+
+    .form{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .input{
+      width:100%;
+      border:1px solid var(--line);
+      background:var(--card);
+      color:var(--text);
+      border-radius:14px;
+      padding:13px 14px;
+      font-size:15px;
+      outline:none;
+      transition:.2s ease;
+    }
+
+    .input:focus{
+      border-color:var(--primary2);
+      box-shadow:0 0 0 4px rgba(167,139,250,.14);
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:13px 14px;
+      font-weight:800;
+      color:#fff;
+      background:linear-gradient(135deg,var(--primary),var(--green));
+      box-shadow:0 10px 20px rgba(124,58,237,.18);
+      transition:.2s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .msg{
+      min-height:20px;
+      font-size:14px;
+      color:var(--muted);
+      margin:0;
+    }
+
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:280px 1fr;
+    }
+
+    .sidebar{
+      background:rgba(255,255,255,.82);
+      backdrop-filter:blur(14px);
+      border-right:1px solid var(--line);
+      padding:20px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    body.theme-dark .sidebar{
+      background:rgba(15,23,42,.84);
+    }
+
+    .sideBrand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px;
+      border-radius:20px;
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .sideBrandText{
+      min-width:0;
+    }
+
+    .sideTitle{
+      font-weight:900;
+      line-height:1.1;
+    }
+
+    .sideSub{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .sideMenu{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .navBtn{
+      border:none;
+      background:var(--card);
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius:16px;
+      padding:13px 14px;
+      text-align:left;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    .navBtn:hover,
+    .navBtn.active{
+      background:linear-gradient(135deg, rgba(124,58,237,.12), rgba(16,185,129,.10));
+      border-color:rgba(124,58,237,.25);
+      color:var(--text);
+      transform:translateY(-1px);
+    }
+
+    .sidebarBottom{
+      margin-top:auto;
+      display:grid;
+      gap:12px;
+      padding:14px;
+      border-radius:20px;
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .themeCardBtn,
+    .logoutBtn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    .themeCardBtn{
+      background:linear-gradient(135deg,#eef2ff,#ecfeff);
+      color:#4c1d95;
+      border:1px solid #ddd6fe;
+    }
+
+    body.theme-dark .themeCardBtn{
+      background:linear-gradient(135deg,#1e293b,#0f172a);
+      color:#e2e8f0;
+      border:1px solid #334155;
+    }
+
+    .logoutBtn{
+      background:#fff1f2;
+      color:#be123c;
+      border:1px solid #fecdd3;
+    }
+
+    body.theme-dark .logoutBtn{
+      background:#3f1d24;
+      color:#fecdd3;
+      border:1px solid #5f2835;
+    }
+
+    .main{
+      padding:24px;
+      min-width:0;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:22px;
+      flex-wrap:wrap;
+    }
+
+    .pageTitle{
+      margin:0;
+      font-size:30px;
+      font-weight:900;
+      line-height:1.1;
+    }
+
+    .welcome{
+      color:var(--muted);
+      margin-top:6px;
+      font-size:14px;
+    }
+
+    .topbarActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .themeTopBtn{
+      border:none;
+      background:var(--card);
+      color:var(--text);
+      border:1px solid var(--line);
+      padding:11px 16px;
+      border-radius:999px;
+      font-weight:800;
+      box-shadow:var(--shadow);
+      transition:.2s ease;
+    }
+
+    .themeTopBtn:hover{
+      transform:translateY(-1px);
+    }
+
+    .page{
+      display:none;
+    }
+
+    .page.active{
+      display:block;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.9);
+      box-shadow:var(--shadow);
+      border-radius:24px;
+      padding:22px;
+    }
+
+    body.theme-dark .card{
+      background:rgba(17,24,39,.92);
+      border-color:rgba(255,255,255,.06);
+    }
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+
+    .big{
+      font-size:34px;
+      font-weight:900;
+      margin:6px 0;
+      line-height:1.1;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .item{
+      padding:14px;
+      border-radius:16px;
+      background:var(--card-2);
+      border:1px solid var(--line);
+    }
+
+    .heroCard{
+      margin-bottom:18px;
+      padding:24px;
+      border-radius:28px;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.35), transparent 32%),
+        linear-gradient(135deg, rgba(124,58,237,.95), rgba(16,185,129,.88));
+      color:#fff;
+      box-shadow:var(--shadow-2);
+    }
+
+    .heroCard h3{
+      margin:0 0 10px;
+      font-size:16px;
+      font-weight:800;
+      opacity:.92;
+    }
+
+    .heroCard h2{
+      margin:0;
+      font-size:32px;
+      line-height:1.15;
+      font-weight:900;
+      max-width:680px;
+    }
+
+    .heroCard p{
+      margin:12px 0 0;
+      max-width:700px;
+      line-height:1.6;
+      opacity:.95;
+    }
+
+    @media (max-width: 980px){
+      .app{grid-template-columns:1fr}
+      .sidebar{
+        position:static;
+        height:auto;
+      }
+      .grid{grid-template-columns:1fr 1fr}
+    }
+
+    @media (max-width: 700px){
+      .grid{grid-template-columns:1fr}
+      .main{padding:16px}
+      .authCard{padding:22px}
+      .pageTitle{font-size:24px}
+      .heroCard h2{font-size:26px}
+      .topbarActions{width:100%}
+      .themeTopBtn{width:100%}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH -->
+  <section id="authGate" class="authWrap">
+    <div class="authCard">
+      <div class="brand">
+        <div class="logo">LG</div>
+        <div>
+          <h1 class="title">Luxury Gym</h1>
+          <p class="sub">Premium fitness dashboard with clean login and modern layout.</p>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button id="showLoginBtn" class="tabBtn active" type="button">Login</button>
+        <button id="showSignupBtn" class="tabBtn" type="button">Sign Up</button>
+      </div>
+
+      <form id="loginForm" class="form">
+        <input class="input" id="loginEmail" type="email" placeholder="Email" required />
+        <input class="input" id="loginPass" type="password" placeholder="Password" required />
+        <button class="btn" type="submit">Login</button>
+        <p id="authMsg" class="msg"></p>
+      </form>
+
+      <form id="signupForm" class="form hidden">
+        <input class="input" id="signupName" type="text" placeholder="Full name" required />
+        <input class="input" id="signupEmail" type="email" placeholder="Email" required />
+        <input class="input" id="signupPass" type="password" placeholder="Password" required />
+        <button class="btn" type="submit">Create Account</button>
+        <p id="authMsg2" class="msg"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <div id="appShell" class="app hidden">
+    <aside class="sidebar">
+      <div class="sideBrand">
+        <div class="logo">LG</div>
+        <div class="sideBrandText">
+          <div class="sideTitle">Luxury Gym</div>
+          <div class="sideSub">Fitness dashboard</div>
+        </div>
+      </div>
+
+      <nav class="sideMenu">
+        <button class="navBtn active" data-page="dashboard" type="button">Dashboard</button>
+        <button class="navBtn" data-page="workouts" type="button">Workouts</button>
+        <button class="navBtn" data-page="nutrition" type="button">Nutrition</button>
+        <button class="navBtn" data-page="progress" type="button">Progress</button>
+        <button class="navBtn" data-page="ai" type="button">AI Coach</button>
+        <button class="navBtn" data-page="settings" type="button">Settings</button>
+      </nav>
+
+      <div class="sidebarBottom">
+        <button id="themeToggle" class="themeCardBtn" type="button">Theme: Light</button>
+        <button id="btnLogout" class="logoutBtn" type="button">Logout</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h2 class="pageTitle" id="pageTitle">Dashboard</h2>
+          <div class="welcome">Welcome back, <span id="userLabel">User</span></div>
+        </div>
+
+        <div class="topbarActions">
+          <button id="themeToggleTop" class="themeTopBtn" type="button">Theme Control</button>
+        </div>
+      </div>
+
+     <section id="page-dashboard" class="page active">
+  <div id="dashboardMount"></div>
+</section>
+
+      <section id="page-workouts" class="page"></section>
+
+      <section id="page-nutrition" class="page">
+        <div class="card">
+          <h3>Nutrition</h3>
+          <div class="list">
+            <div class="item">Breakfast: Oats + Eggs</div>
+            <div class="item">Lunch: Rice + Chicken</div>
+            <div class="item">Dinner: Beef + Salad</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-progress" class="page">
+        <div class="card">
+          <h3>Progress</h3>
+          <div class="list">
+            <div class="item">Weight chart area will come here.</div>
+            <div class="item">Measurements and body stats will come here.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-ai" class="page">
+        <div class="card">
+          <h3>AI Coach</h3>
+          <div class="list">
+            <div class="item">AI workout suggestions will come here.</div>
+            <div class="item">AI meal guidance will come here.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-settings" class="page">
+        <div class="card">
+          <h3>Settings</h3>
+          <div class="list">
+            <div class="item">Theme switch is already added.</div>
+            <div class="item">Profile editing will be added next.</div>
+            <div class="item">Notifications and preferences later.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+<script src="js/storage.js"></script>
+<script src="js/pages/dashboard.js"></script>
+<script src="js/pages/workouts.js"></script>
+<script src="js/pages/nutrition.js"></script>
+<script src="js/pages/progress.js"></script>
+<script src="js/pages/settings.js"></script>
+<script src="js/app.js"></script>
+  
+  </script>
+</body>
+</html>
