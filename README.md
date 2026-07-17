@@ -13,3 +13,5 @@ A premium, high-performance cross-platform mobile application designed for gym m
 - **Premium UI/UX:** Built with smooth transitions, responsive layouts, and a clean modern aesthetic.
 - **Secure Authentication:** Robust user login and profile management integrated with backend services.
 - **App Audit Ready:** Clean, modular, and well-documented codebase optimized for performance.
+
+<img width="1536" height="1024" alt="GYM10" src="https://github.com/user-attachments/assets/cea76056-c215-4917-85db-cc6670678029" />
